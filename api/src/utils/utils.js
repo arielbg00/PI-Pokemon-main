@@ -6,17 +6,12 @@ const saveTypesInDb = async () => {
    const typesUrls = getApiTypes.data.results.map(obj => axios.get(obj.url).then(r => r.data));
    const typesApi = await Promise.all(typesUrls);
 
-   const arrayTypes = typesApi.map(obj => {
-      return {
-         id: obj.id,
-         name: obj.name
-      }
-   });
+   const arrayTypes = typesApi.map(({id, name}) => ({id, name}));
    // create types in the DB
    await Type.bulkCreate(arrayTypes);  //  require Type from DB
 };
 
-const getAllPokemons = async () => {
+const getAllApi = async () => {
    // https://pokeapi.co/api/v2/pokemon
    // get pokemons from API
    const getApiPart1 = await axios.get("https://pokeapi.co/api/v2/pokemon");  //  require and install axios
@@ -41,7 +36,10 @@ const getAllPokemons = async () => {
       };
       return obj;
    });
+   return pokemonsApi;
+};
 
+const getAllDb = async () => {
    // get pokemons from DB
    const getDb = await Pokemon.findAll({  //  require Pokemon from DB
       include: [{
@@ -52,9 +50,23 @@ const getAllPokemons = async () => {
          }
       }]
    });
+   return getDb;
+};
 
-   const getAll = [...pokemonsApi, ...getDb];
-   return getAll;
+let store = [];
+
+const getAllPokemons = async () => {
+   const db = await getAllDb();
+   
+   if (store.length) {
+      const newStore = store.slice(0, 40).concat(db);
+      return newStore;
+   }
+   
+   const api = await getAllApi();
+
+   store = [...api, ...db];
+   return store;
 };
 
 module.exports = {

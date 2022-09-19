@@ -19,14 +19,7 @@ router.get("/pokemons", async (req, res) => {
          const pokemon = getAll.find(poke => poke.name === name);
          pokemon ? res.json(pokemon) : res.send("Pokemon not found");
       } else {
-         const allPokemons = getAll.map(poke => {
-            return {
-               name: poke.name,
-               image: poke.image,
-               types: poke.types
-            }
-         });         
-         console.log(getAll);
+         const allPokemons = getAll.map(({ name, image, types }) => ({ name, image, types }));
          res.json(allPokemons);
       }      
    } catch (error) {
@@ -40,7 +33,6 @@ router.get("/pokemons/:id", async (req, res) => {
       const pokemons = await getAllPokemons();
       const pokemon = pokemons.find(poke => poke.id.toString() === id);
 
-      console.log(pokemon);
       pokemon ? res.json(pokemon) : res.status(400).send("Pokemon not found");
    } catch (error) {
       console.log(error);
@@ -52,7 +44,6 @@ router.post("/pokemons", async (req, res) => {
    if (!name || !hp || !attack || !defense || !image) {
       res.status(400).json({ msg: "missing data" });
    }
-
    try {
       const obj = { name, hp, attack, defense, speed, height, weight, image };
       const newPoke = await Pokemon.create(obj);
@@ -67,7 +58,6 @@ router.post("/pokemons", async (req, res) => {
 router.get("/types", async (req, res) => {
    try {
       const types = await Type.findAll();
-      console.log(types);
       res.send(types);
    } catch (error) {
       console.log(error);
