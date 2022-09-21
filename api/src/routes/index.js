@@ -19,7 +19,7 @@ router.get("/pokemons", async (req, res) => {
          const pokemon = getAll.find(poke => poke.name === name);
          pokemon ? res.json(pokemon) : res.send("Pokemon not found");
       } else {
-         const allPokemons = getAll.map(({ name, image, types }) => ({ name, image, types }));
+         const allPokemons = getAll.map(({ id, name, image, types }) => ({ id, name, image, types }));
          res.json(allPokemons);
       }      
    } catch (error) {
