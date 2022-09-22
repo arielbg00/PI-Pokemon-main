@@ -1,13 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Card from "./Card";
 import { Link } from "react-router-dom";
 import { getPokemons } from "../redux/actions";
+import Paginated from "./Paginated";
 
 export default function AllCards() {
 
    const statePokemons = useSelector((state) => state.pokemons);
    const dispatch = useDispatch();
+
+   // Paginated
+   const [currentPage, setCurrentPage] = useState(1);
+   const [pokemonsInPage] = useState(12);
+   const indexLastCharacter = currentPage * pokemonsInPage;
+   const indexFirstCharacter = indexLastCharacter - pokemonsInPage;
+   const currentPokemons = statePokemons.slice(indexFirstCharacter, indexLastCharacter);
+
+   const paginate = (pageNumber) => {
+      setCurrentPage(pageNumber);
+   };
+   // -------------------
 
    useEffect(() => {
       dispatch(getPokemons());
@@ -15,9 +28,14 @@ export default function AllCards() {
 
    return (
       <>
+         <Paginated
+            pokemonsInPage={pokemonsInPage}
+            statePokemons={statePokemons.length}
+            paginate={paginate}
+         />
          <div>
             {
-               statePokemons.length ? statePokemons.map((poke) => (
+               currentPokemons.length ? currentPokemons.map((poke) => (
                   <Link key={poke.id} to={`/details/${poke.id}`}>
                      <Card name={poke.name} image={poke.image} types={poke.types} />
                   </Link>

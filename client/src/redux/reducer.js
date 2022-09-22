@@ -10,6 +10,11 @@ export default function rootReducer(state = initialState, action) {
             ...state,
             pokemons: action.payload
          };
+      case "GET_POKEMON_ID":
+         return {
+            ...state,
+            pokemonDetails: action.payload
+         };
       default:
          return state;
    }
