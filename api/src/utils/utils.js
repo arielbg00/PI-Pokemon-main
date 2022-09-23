@@ -44,13 +44,14 @@ const getAllDb = async () => {
    const getDb = await Pokemon.findAll({  //  require Pokemon from DB
       include: [{
          model: Type,  //  require Type from DB
-         attributes: ["name"],
-         through: {
-            attributes: []
-         }
+         // attributes: ["name"],
+         // through: {
+         //    attributes: []
+         // }
       }]
    });
-   return getDb;
+   const getDbMap = getDb.map(({id, name, hp, attack, defense, speed, height, weight, image, created, types}) => ({id, name, hp, attack, defense, speed, height, weight, image, created, types: types.map(o => o.name)}))
+   return getDbMap;
 };
 
 let store = [];

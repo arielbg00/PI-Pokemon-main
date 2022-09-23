@@ -4,15 +4,18 @@ import Card from "./Card";
 import { Link } from "react-router-dom";
 import { getPokemons } from "../redux/actions";
 import Paginated from "./Paginated";
+import Filters from "./Filters";
 
 export default function AllCards() {
 
    const statePokemons = useSelector((state) => state.pokemons);
    const dispatch = useDispatch();
+   // eslint-disable-next-line
+   const [order, setOrder] = useState("");
 
    // Paginated
-   const [currentPage, setCurrentPage] = useState(1);
-   const [pokemonsInPage] = useState(12);
+   const [currentPage, setCurrentPage] = useState(1);  //  eslint-disable-next-line
+   const [pokemonsInPage, setPokemonsInPage] = useState(12);
    const indexLastCharacter = currentPage * pokemonsInPage;
    const indexFirstCharacter = indexLastCharacter - pokemonsInPage;
    const currentPokemons = statePokemons.slice(indexFirstCharacter, indexLastCharacter);
@@ -24,10 +27,12 @@ export default function AllCards() {
 
    useEffect(() => {
       dispatch(getPokemons());
+      // if (!statePokemons.length) { return dispatch(getPokemons()) }
    }, [dispatch])
 
    return (
       <>
+         <Filters setCurrentPage={setCurrentPage} setOrder={setOrder} />
          <Paginated
             pokemonsInPage={pokemonsInPage}
             statePokemons={statePokemons.length}

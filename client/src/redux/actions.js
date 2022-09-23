@@ -20,6 +20,37 @@ export const getPokemonId = (id) => {
    };
 };
 
+export const filterPokemons = (payload) => {
+   return {
+      type: "FILTER_POKEMONS",
+      payload
+   };
+};
+
+export const filterByTypes = (payload) => {
+   return {
+      type: "FILTER_BY_TYPES",
+      payload
+   };
+};
+
+export const getTypes = () => {
+   return async (dispatch) => {
+      const getTypeDb = await axios.get("http://localhost:3001/types");
+      dispatch({
+         type: "GET_TYPES",
+         payload: getTypeDb.data
+      });
+   };
+};
+
+export const alphabeticalOrder = (payload) => {
+   return {
+      type: "ALPHABETICAL_ORDER",
+      payload
+   };
+};
+
 export const createPokemon = () => {
    return async (dispatch) => {};
 };
