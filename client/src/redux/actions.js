@@ -51,6 +51,27 @@ export const alphabeticalOrder = (payload) => {
    };
 };
 
+export const getPokemonName = (name) => {
+   return async (dispatch) => {
+      try {
+         const getByName = await axios.get(`http://localhost:3001/pokemons/?name=${name}`);
+         dispatch({
+            type: "GET_POKEMON_NAME",
+            payload: getByName.data
+         });
+      } catch (error) {
+         alert(`${name} is not a Pokémon`)
+      }
+   };
+};
+
+export const changePage = (payload) => {
+   return {
+      type: "CHANGE_PAGE",
+      payload
+   }
+};
+
 export const createPokemon = () => {
    return async (dispatch) => {};
 };

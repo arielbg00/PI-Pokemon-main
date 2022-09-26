@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Card from "./Card";
 import { Link } from "react-router-dom";
-import { getPokemons } from "../redux/actions";
+import { getPokemons, changePage } from "../redux/actions";
 import Paginated from "./Paginated";
 import Filters from "./Filters";
+import SearchBar from "./SearchBar";
 
 export default function AllCards() {
 
@@ -14,37 +15,56 @@ export default function AllCards() {
    const [order, setOrder] = useState("");
 
    // Paginated
-   const [currentPage, setCurrentPage] = useState(1);  //  eslint-disable-next-line
+   const initialPage = useSelector((state) => state.initialPage);
+   const [currentPage, setCurrentPage] = useState(initialPage);  //  eslint-disable-next-line
    const [pokemonsInPage, setPokemonsInPage] = useState(12);
    const indexLastCharacter = currentPage * pokemonsInPage;
    const indexFirstCharacter = indexLastCharacter - pokemonsInPage;
-   const currentPokemons = statePokemons.slice(indexFirstCharacter, indexLastCharacter);
+   const currentPokemons = statePokemons.length ? statePokemons.slice(indexFirstCharacter, indexLastCharacter) : false
 
    const paginate = (pageNumber) => {
       setCurrentPage(pageNumber);
+      dispatch(changePage(pageNumber))
    };
    // -------------------
 
+   const handleBack = (e) => {
+      dispatch(getPokemons());
+      setCurrentPage(initialPage);
+   };
+
    useEffect(() => {
       dispatch(getPokemons());
+      setCurrentPage(initialPage);
       // if (!statePokemons.length) { return dispatch(getPokemons()) }
    }, [dispatch])
 
    return (
       <>
-         <Filters setCurrentPage={setCurrentPage} setOrder={setOrder} />
-         <Paginated
-            pokemonsInPage={pokemonsInPage}
-            statePokemons={statePokemons.length}
-            paginate={paginate}
-         />
+         <SearchBar setCurrentPage={setCurrentPage} statePokemons={statePokemons} />
+         {
+            currentPokemons.length ?
+               <div>
+                  <Filters setCurrentPage={setCurrentPage} setOrder={setOrder} />
+                  <Paginated
+                     pokemonsInPage={pokemonsInPage}
+                     statePokemons={statePokemons.length}
+                     paginate={paginate}
+                  />
+               </div> : <button type="text" onClick={(e) => handleBack(e)}>Volver</button>
+         }
          <div>
             {
-               currentPokemons.length ? currentPokemons.map((poke) => (
-                  <Link key={poke.id} to={`/details/${poke.id}`}>
+               statePokemons.id ? <Card {...statePokemons} /> : false
+            }
+         </div>
+         <div>
+            {
+               currentPokemons.length ? currentPokemons.map((poke, i) => (
+                  <Link key={i} to={`/details/${poke.id}`}>
                      <Card name={poke.name} image={poke.image} types={poke.types} />
                   </Link>
-               )) : <h2>No hay nada</h2>
+               )) : false
             }
          </div>
       </>

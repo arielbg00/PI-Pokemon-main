@@ -2,7 +2,8 @@ const initialState = {
    pokemons: [],
    pokemonDetails: {},
    copyPokemons: [],
-   pokemonTypes: []
+   pokemonTypes: [],
+   initialPage: 1
 };
 
 export default function rootReducer(state = initialState, action) {
@@ -52,6 +53,16 @@ export default function rootReducer(state = initialState, action) {
             ...state,
             pokemons: pokemonsSorted
          };
+      case "GET_POKEMON_NAME":
+         return {
+            ...state,
+            pokemons: action.payload
+         };
+      case "CHANGE_PAGE":
+         return {
+            ...state,
+            initialPage: action.payload
+         }
       default:
          return state;
    }
