@@ -30,13 +30,12 @@ export default function AllCards() {
 
    const handleBack = (e) => {
       dispatch(getPokemons());
-      setCurrentPage(initialPage);
+      setCurrentPage(1);
    };
 
    useEffect(() => {
-      dispatch(getPokemons());
+      if (!statePokemons.length) return dispatch(getPokemons());
       setCurrentPage(initialPage);
-      // if (!statePokemons.length) { return dispatch(getPokemons()) }
    }, [dispatch])
 
    return (

@@ -21,13 +21,15 @@ export default function rootReducer(state = initialState, action) {
          };
       case "FILTER_POKEMONS":
          const allPokemons = state.copyPokemons;
-         const filtered = action.payload === "created" ? allPokemons.filter(el => el.created) : allPokemons.filter(el => !el.created);
+         const filtered = action.payload === "created" ? allPokemons.filter(el => el.created) 
+            : allPokemons.filter(el => !el.created);
          return {
             ...state,
             pokemons: action.payload === "All" ? allPokemons : filtered
          };
       case "FILTER_BY_TYPES":
-         const filterByType = action.payload === "all" ? state.copyPokemons : state.copyPokemons.filter(el => el.types.includes(action.payload))
+         const filterByType = action.payload === "all" ? state.copyPokemons 
+            : state.copyPokemons.filter(el => el.types.includes(action.payload));
          return {
             ...state,
             pokemons: filterByType
@@ -38,13 +40,13 @@ export default function rootReducer(state = initialState, action) {
             pokemonTypes: action.payload
          };
       case "ALPHABETICAL_ORDER":
-         const pokemonsSorted = action.payload === "asc" ? 
+         const pokemonsSorted = action.payload === "a-z" ?
             state.pokemons.sort((a, b) => {
                if (a.name > b.name) return 1;
                else if (b.name > a.name) return -1;
                else return 0;
-            }) : 
-            state.pokemons.sort((a, b) => {
+            })
+            : state.pokemons.sort((a, b) => {
                if (a.name > b.name) return -1;
                else if (b.name > a.name) return 1;
                else return 0;
@@ -52,6 +54,14 @@ export default function rootReducer(state = initialState, action) {
          return {
             ...state,
             pokemons: pokemonsSorted
+         };
+      case "ATTACK_ORDER":
+         const attackSorted = action.payload === "max" ? 
+            state.pokemons.sort((a, b) => b.attack - a.attack)
+            : state.pokemons.sort((a, b) => a.attack - b.attack);
+         return {
+            ...state,
+            pokemons: attackSorted
          };
       case "GET_POKEMON_NAME":
          return {

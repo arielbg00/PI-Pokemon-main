@@ -51,6 +51,13 @@ export const alphabeticalOrder = (payload) => {
    };
 };
 
+export const attackOrder = (payload) => {
+   return {
+      type: "ATTACK_ORDER",
+      payload
+   };
+};
+
 export const getPokemonName = (name) => {
    return async (dispatch) => {
       try {
@@ -69,7 +76,7 @@ export const changePage = (payload) => {
    return {
       type: "CHANGE_PAGE",
       payload
-   }
+   };
 };
 
 export const createPokemon = () => {
