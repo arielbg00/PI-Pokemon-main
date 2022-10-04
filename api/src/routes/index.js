@@ -49,7 +49,8 @@ router.post("/pokemons", async (req, res) => {
       const obj = { name, hp, attack, defense, speed, height, weight, image };
       const newPoke = await Pokemon.create(obj);
 
-      await newPoke.addTypes(types);  //  le paso ids de Type
+      const typesDb = await Type.findAll({ where: { name: types } });
+      await newPoke.addTypes(typesDb);
       res.send("Pokemon Created");
    } catch (error) {
       console.log(error);

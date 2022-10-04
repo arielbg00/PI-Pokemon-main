@@ -10,6 +10,7 @@ import SearchBar from "./SearchBar";
 export default function AllCards() {
 
    const statePokemons = useSelector((state) => state.pokemons);
+   const stateCopyPokemons = useSelector((state) => state.copyPokemons);
    const dispatch = useDispatch();
    // eslint-disable-next-line
    const [order, setOrder] = useState("");
@@ -40,32 +41,40 @@ export default function AllCards() {
 
    return (
       <>
-         <SearchBar setCurrentPage={setCurrentPage} statePokemons={statePokemons} />
          {
-            currentPokemons.length ?
+            stateCopyPokemons.length ?
                <div>
-                  <Filters setCurrentPage={setCurrentPage} setOrder={setOrder} />
-                  <Paginated
-                     pokemonsInPage={pokemonsInPage}
-                     statePokemons={statePokemons.length}
-                     paginate={paginate}
-                  />
-               </div> : <button type="text" onClick={(e) => handleBack(e)}>Volver</button>
+                  <div>
+                     <Link to="/create">Create Pokemon</Link>
+                  </div>
+                  <SearchBar setCurrentPage={setCurrentPage} statePokemons={statePokemons} />
+                  {
+                     currentPokemons.length ?
+                        <div>
+                           <Filters setCurrentPage={setCurrentPage} setOrder={setOrder} />
+                           <Paginated
+                              pokemonsInPage={pokemonsInPage}
+                              statePokemons={statePokemons.length}
+                              paginate={paginate}
+                           />
+                        </div> : <button type="text" onClick={(e) => handleBack(e)}>Volver</button>
+                  }
+                  <div>
+                     {
+                        statePokemons.id ? <Card {...statePokemons} /> : false
+                     }
+                  </div>
+                  <div>
+                     {
+                        currentPokemons.length ? currentPokemons.map((poke, i) => (
+                           <Link key={i} to={`/details/${poke.id}`}>
+                              <Card name={poke.name} image={poke.image} types={poke.types} />
+                           </Link>
+                        )) : false
+                     }
+                  </div>
+               </div> : <h1>error</h1>
          }
-         <div>
-            {
-               statePokemons.id ? <Card {...statePokemons} /> : false
-            }
-         </div>
-         <div>
-            {
-               currentPokemons.length ? currentPokemons.map((poke, i) => (
-                  <Link key={i} to={`/details/${poke.id}`}>
-                     <Card name={poke.name} image={poke.image} types={poke.types} />
-                  </Link>
-               )) : false
-            }
-         </div>
       </>
    )
 }

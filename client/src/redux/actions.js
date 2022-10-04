@@ -79,6 +79,9 @@ export const changePage = (payload) => {
    };
 };
 
-export const createPokemon = () => {
-   return async (dispatch) => {};
+export const createPokemon = (payload) => {
+   return async () => {
+      const response = await axios.post("http://localhost:3001/pokemons", payload);
+      return response;
+   };
 };
