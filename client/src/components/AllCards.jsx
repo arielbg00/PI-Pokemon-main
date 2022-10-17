@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Card from "./Card";
 import { Link } from "react-router-dom";
-import { getPokemons, changePage } from "../redux/actions";
+import { getPokemons, changePage, attackOrder, filterByTypes, filterPokemons, changeFilter } from "../redux/actions";
 import Paginated from "./Paginated";
 import Filters from "./Filters";
 import SearchBar from "./SearchBar";
@@ -29,9 +29,23 @@ export default function AllCards() {
    };
    // -------------------
 
-   const handleBack = (e) => {
-      dispatch(getPokemons());
-      setCurrentPage(1);
+   const filter = useSelector(state => state.filter);
+   function changeFilters(data) {
+      if (!data || data === "All") dispatch(getPokemons());
+      else if (data === "max") dispatch(attackOrder(data));
+      else if (data === "api") dispatch(filterPokemons(data));
+      else if (data === "created") dispatch(filterPokemons(data));
+      else dispatch(filterByTypes(data));
+   }
+
+   const handleBack = () => {
+      if (!statePokemons.length && !statePokemons.id) {
+         dispatch(changeFilter(""));
+         dispatch(getPokemons());
+      } else {
+         changeFilters(filter);
+         setCurrentPage(initialPage);
+      }
    };
 
    useEffect(() => {

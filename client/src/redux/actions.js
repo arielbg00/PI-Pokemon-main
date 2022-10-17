@@ -85,3 +85,10 @@ export const createPokemon = (payload) => {
       return response;
    };
 };
+
+export const changeFilter = (payload) => {
+   return {
+      type: "CHANGE_FILTER",
+      payload
+   }
+};

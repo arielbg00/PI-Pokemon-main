@@ -3,7 +3,8 @@ const initialState = {
    pokemonDetails: {},
    copyPokemons: [],
    pokemonTypes: [],
-   initialPage: 1
+   initialPage: 1,
+   filter: ""
 };
 
 export default function rootReducer(state = initialState, action) {
@@ -57,7 +58,7 @@ export default function rootReducer(state = initialState, action) {
          };
       case "ATTACK_ORDER":
          const attackSorted = action.payload === "max" ? 
-            state.pokemons.sort((a, b) => b.attack - a.attack)
+            state.copyPokemons.sort((a, b) => b.attack - a.attack)
             : state.pokemons.sort((a, b) => a.attack - b.attack);
          return {
             ...state,
@@ -73,6 +74,11 @@ export default function rootReducer(state = initialState, action) {
             ...state,
             initialPage: action.payload
          }
+      case "CHANGE_FILTER":
+         return {
+            ...state,
+            filter: action.payload
+         };
       default:
          return state;
    }

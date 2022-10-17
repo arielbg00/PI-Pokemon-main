@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getTypes, filterByTypes, attackOrder, alphabeticalOrder, filterPokemons, changePage } from "../redux/actions";
+import { getTypes, filterByTypes, attackOrder, alphabeticalOrder, filterPokemons, changePage, changeFilter } from "../redux/actions";
 
 export default function Filters({setCurrentPage, setOrder}) {
 
@@ -15,6 +15,7 @@ export default function Filters({setCurrentPage, setOrder}) {
 
    const handleFilterByTypes = (e) => {
       dispatch(filterByTypes(e.target.value));
+      dispatch(changeFilter(e.target.value));
       dispatch(changePage(1));
       setCurrentPage(1);
    };
@@ -22,6 +23,7 @@ export default function Filters({setCurrentPage, setOrder}) {
    const handleAttackOrder = (e) => {
       e.preventDefault();
       dispatch(attackOrder(e.target.name));
+      dispatch(changeFilter(e.target.name));
       dispatch(changePage(1));
       setCurrentPage(1);
       setOrder(e.target.name);
@@ -37,6 +39,7 @@ export default function Filters({setCurrentPage, setOrder}) {
 
    const handleFilterPokemons = (e) => {
       dispatch(filterPokemons(e.target.value));
+      dispatch(changeFilter(e.target.value));
       dispatch(changePage(1));
       setCurrentPage(1);
    };
